@@ -1,0 +1,63 @@
+Q. 7. Demonstrate the usage/sending of a digitally signed document.
+import rsa
+
+def generate_keys():
+    (public_key, private_key) = rsa.newkeys(2048)  # 2048-bit key length
+    return public_key, private_key
+
+def sign_document(document, private_key):
+    document_bytes = document.encode('utf-8')
+    signature = rsa.sign(document_bytes, private_key, 'SHA-256')
+    
+    return signature
+
+def send_document(document, signature):
+    return {
+        'document': document,
+        'signature': signature
+    }
+
+def verify_signature(document, signature, public_key):
+    document_bytes = document.encode('utf-8')
+    
+    try:
+        rsa.verify(document_bytes, signature, public_key)
+        print("The signature is valid, and the document is authentic.")
+    except rsa.VerificationError:
+        print("The signature is invalid, or the document has been tampered with.")
+
+def main():
+    public_key, private_key = generate_keys()
+    document = "This is a confidential document that needs to be signed."
+    signature = sign_document(document, private_key)
+    sent_data = send_document(document, signature)
+    
+    print(f"Original Document: {sent_data['document']}")
+    verify_signature(sent_data['document'], sent_data['signature'], public_key)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+APPLICATIONS
+1.	DOCUMENT AUTHENTICITY:
+o	Ensure the document was created by the intended sender.
+
+2.	INTEGRITY:
+o	Confirm the document hasn't been tampered with during transmission.
+
+3.	NON-REPUDIATION:
+o	Prevent the sender from denying their involvement.
+________________________________________
+SECURITY CONSIDERATIONS
+1.	KEY PROTECTION:
+o	Private keys must be kept secure to prevent unauthorized signing.
+
+2.	KEY SIZE:
+o	Use at least 2048-bit RSA keys for strong security.
+
+3.	CERTIFICATE AUTHORITY:
+o	In real-world use, public keys are distributed with certificates issued by trusted authorities.
