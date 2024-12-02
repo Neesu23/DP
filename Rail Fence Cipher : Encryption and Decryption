@@ -1,0 +1,118 @@
+Q. 2. Write a program to perform encryption and decryption using Rail Fence Cipher (transpositional cipher)
+
+
+def encrypt_rail_fence(text, depth):
+    rail = [['\n' for i in range(len(text))] for j in range(depth)]
+    dir_down = False
+    row, col = 0, 0
+
+    for i in range(len(text)):
+        if (row == 0) or (row == depth - 1):
+            dir_down = not dir_down
+
+        rail[row][col] = text[i]
+        col += 1
+
+        if dir_down:
+            row += 1
+        else:
+            row -= 1
+
+    result = []
+    for i in range(depth):
+        for j in range(len(text)):
+            if rail[i][j] != '\n':
+                result.append(rail[i][j])
+    return "".join(result)
+
+def decrypt_rail_fence(cipher, depth):
+    rail = [['\n' for i in range(len(cipher))] for j in range(depth)]
+    dir_down = None
+    row, col = 0, 0
+
+    for i in range(len(cipher)):
+        if row == 0:
+            dir_down = True
+        if row == depth - 1:
+            dir_down = False
+
+        rail[row][col] = '*'
+        col += 1
+
+        if dir_down:
+            row += 1
+        else:
+            row -= 1
+
+    index = 0
+    for i in range(depth):
+        for j in range(len(cipher)):
+            if rail[i][j] == '*' and index < len(cipher):
+                rail[i][j] = cipher[index]
+                index += 1
+
+    result = []
+    row, col = 0, 0
+    for i in range(len(cipher)):
+        if row == 0:
+            dir_down = True
+        if row == depth-1:
+            dir_down = False
+
+        if rail[row][col] != '*':
+            result.append(rail[row][col])
+            col += 1
+
+        if dir_down:
+            row += 1
+        else:
+            row -= 1
+
+    return "".join(result)
+
+if __name__ == "__main__":
+    while True:
+        print("\nMenu:")
+        print("1. Encrypt a message")
+        print("2. Decrypt a message")
+        print("3. Exit")
+        choice = input("Enter your choice : ")
+
+        if choice == '1':
+            message = input("Enter the message to encrypt: ")
+            depth = int(input("Enter the depth (number of rails): "))
+            cipher_text = encrypt_rail_fence(message, depth)
+            print(f"Encrypted Message: {cipher_text}")
+
+        elif choice == '2':
+            cipher_text = input("Enter the message to decrypt: ")
+            depth = int(input("Enter the depth (number of rails): "))
+            decrypted_text = decrypt_rail_fence(cipher_text, depth)
+            print(f"Decrypted Message: {decrypted_text}")
+
+        elif choice == '3':
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid choice! Please try again.")
+
+
+
+HOW THE RAIL FENCE CIPHER WORKS
+The RAIL FENCE CIPHER is a transposition cipher that rearranges the plaintext characters into a zigzag pattern across multiple rows.
+1.	ENCRYPTION:
+o	The plaintext is written in a zigzag pattern using the number of rows specified by the key.
+o	The characters are then read row by row to form the encrypted text.
+
+2.	Decryption:
+o	Reconstructs the zigzag pattern by marking the path and filling in the characters row by row.
+o	Reads the characters in a zigzag pattern to retrieve the original plaintext.
+
+
+APPLICATIONS AND LIMITATIONS
+APPLICATIONS:
+•	Used in simple message scrambling and cryptography teaching.
+•	Introduces the concept of transposition in cryptography.
+LIMITATIONS:
+•	Not secure against modern cryptanalysis as the structure is predictable.
