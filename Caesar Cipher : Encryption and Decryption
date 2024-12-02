@@ -1,0 +1,65 @@
+Q. 1. Write a program to perform encryption and decryption using Caesar cipher (substitutional cipher)
+
+def caesar_cipher(text, shift, mode):
+  result = ''
+  if mode == 'decrypt':
+    shift = -shift
+  for char in text:
+    if char.isalpha():
+      start = ord('a') if char.islower() else ord('A')
+      shifted_char = chr(((ord(char) - start + shift) % 26 )+ start)
+    else:
+      shifted_char = char
+
+    if mode == 'decrypt':
+     result = result + shifted_char
+    else:
+     result += shifted_char
+
+  return result
+
+def menu():
+  while True:
+    print("Caeser Cipher Menu")
+    print("1. Encrypt")
+    print("2. Decrypt")
+    print("3. Exit")
+    choice = input("Enter your choice: ")
+
+    if choice == '1':
+      text = input("Enter the text to encrypt: ")
+      shift = int(input("Enter the shift value: "))
+      encrypted_text = caesar_cipher(text, shift, 'encrypt')
+      print("Encrypted:", encrypted_text)
+
+    elif choice == '2':
+      text = input("Enter the text to decrypt: ")
+      shift = int(input("Enter the shift value: "))
+      decrypted_text = caesar_cipher(text, shift, 'decrypt')
+      print("Decrypted:", decrypted_text)
+
+    elif choice == '3':
+      print("Exiting the program.")
+      break
+    else:
+      print("Invalid choice. Please try again.")
+if __name__ == "__main__":
+  menu()
+
+
+
+
+How the Caesar Cipher Works
+The Caesar Cipher is a substitution cipher that shifts each letter in the plaintext by a fixed number of positions in the alphabet. For example, with a shift of 3:
+•	A becomes D
+•	B becomes E, and so on.
+When the end of the alphabet is reached, it wraps around to the beginning.
+
+APPLICATIONS AND LIMITATIONS
+
+APPLICATIONS:
+•	Used in basic cryptography to understand substitution ciphers.
+•	Can serve as a teaching tool for learning encryption techniques.
+
+LIMITATIONS:
+•	It is not secure for modern use since the shift key can be brute-forced (only 25 possible shifts).
